@@ -1,6 +1,8 @@
 # DIST - Distance Integration and Similarity Tool
 
-A tool that compares gene expression similarities in bulk. 
+A tool that compares gene expression similarities in bulk.
+
+Using components from [Project Intronomicon](https://github.com/KorfLab/intronomicon) at [The Korf Lab](https://github.com/KorfLab).
 
 Currently serving C. elegans only.
 

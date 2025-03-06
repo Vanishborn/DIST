@@ -16,35 +16,36 @@ def read_file(file):
 def manhattan(d1, d2):
 	total = 0
 	for gene in d1:
-		if gene in d2:
-			total += abs(d1[gene] - d2[gene])
+		if gene not in d2: continue
+		total += abs(d1[gene] - d2[gene])
 	return total
 
 def cartesian(d1, d2):
 	total = 0
 	for gene in d1:
-		if gene in d2:
-			total += (d1[gene] - d2[gene]) ** 2
+		if gene not in d2: continue
+		total += (d1[gene] - d2[gene]) ** 2
 	result = math.sqrt(total)
 	return result
 
-def normalize(data):
-	total = sum(data.values())
-	probabilities = {gene: count / total for gene, count in data.items()}
-	correction_factor = 1.0 / sum(probabilities.values())
-	probabilities = {gene: prob * correction_factor for gene, prob in probabilities.items()}
-	return probabilities
+def normalize(d1, d2):
+	shared_keys = set(d1.keys()).intersection(set(d2.keys()))
+	shared_d1 = {gene: d1[gene] for gene in shared_keys}
+	shared_d2 = {gene: d2[gene] for gene in shared_keys}
+	total_d1 = sum(shared_d1.values())
+	total_d2 = sum(shared_d2.values())
+	p1 = {gene: val / total_d1 for gene, val in shared_d1.items()}
+	p2 = {gene: val / total_d2 for gene, val in shared_d2.items()}
+	return p1, p2
 
 def kullback(d1, d2):
-	p1 = normalize(d1)
-	p2 = normalize(d2)
+	p1, p2 = normalize(d1, d2)
 	total = 0
 	for gene in p1:
-		if gene in p2:
-			ratio = (p1[gene]) / (p2[gene])
-			divergence = p1[gene] * math.log(ratio)
-			total += divergence
-	return abs(total)
+		ratio = (p1[gene]) / (p2[gene])
+		divergence = p1[gene] * math.log(ratio)
+		total += divergence
+	return total
 
 def get_files(input_dir):
 	files = []
